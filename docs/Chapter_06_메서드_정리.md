@@ -4,7 +4,7 @@
 - [Extract Method](#1)
 - [Inline Method](#2)
 - [Inline Temp](#3)
-- [임시변수를 메서드 호출로 전환](#4)
+- [Replace Temp with Query](#4)
 - [직관적 임시 변수 사용](#5)
 - [임시변수 분리](#6)
 - [매개변수로의 값 대입 제거](#7)
@@ -116,7 +116,37 @@
 ```
 
 <a name="4"></a>
-## 임시변수를 메서드 호출로 전환 ##
+## Replace Temp with Query (임시변수를 메서드 호출로 전환) ##
+> 수식의 결과를 저장하는 임시변수가 있을 땐, 
+> 그 수식을 빼내어 메서드로 만든 후, 임시변수 참조 부분을 전부 수식으로 교체하자.
+> 새로 만든 메서드는 다른 메서드에서도 호출 가능하다.
+
+```java
+    double getPrice() {
+        int basePrice = quantity * itemPrice;
+        double discountFactor;
+        if (basePrice > 1000) {
+            discountFactor = 0.95;
+        } else {
+            discountFactor = 0.98;
+        }
+        return basePrice * discountFactor;
+    }
+```
+```java
+    double calculatePrice() {
+        return calculateBasePrice() * calculateBasePrice();
+    }
+    private calculateBasePrice() {
+        return quantity * itemPrice;
+    } 
+    private getDiscountFactor() {
+        return (calculateBasePrice() > 1000) ? 0.95 : 0.98;       
+    }  
+```
+
+- 임시변수는 일시적이고 적용이 국소적 범위로 제한된다. 
+- 지역변수가 많을수록 [메서드 추출](#1)이 어려우므로 최대한 많은 변수를 메서드 호출로 고쳐야 한다.
 
 
 <a name="8"></a>
