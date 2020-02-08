@@ -5,7 +5,7 @@
 - [Inline Method](#2)
 - [Inline Temp](#3)
 - [Replace Temp with Query](#4)
-- [직관적 임시 변수 사용](#5)
+- [Introduce Explaining Variable](#5)
 - [임시변수 분리](#6)
 - [매개변수로의 값 대입 제거](#7)
 - [메서드를 메서드 객체로 전환](#8)
@@ -147,6 +147,29 @@
 
 - 임시변수는 일시적이고 적용이 국소적 범위로 제한된다. 
 - 지역변수가 많을수록 [메서드 추출](#1)이 어려우므로 최대한 많은 변수를 메서드 호출로 고쳐야 한다.
+
+<a name="5"></a>
+## Introduce Explaining Variable (직관적 임시변수 사용) ##
+> 사용된 수식이 복잡할 땐,
+> 수식의 결과나 수식의 일부분을 용도에 부합하는 직관적 이름의 임시변수에 대입하자. 
+
+```java
+        if ((platform.toUpperCase().indexOf("MAC") > -1) &&
+                (browser.toUpperCase().indexOf("IE") > -1) &&
+                wasInitialized() && resize > 0) {
+        }
+```
+```java
+        final boolean isMacOs = platform.toUpperCase().indexOf("MAC") > -1;
+        final boolean isIEBrowser = browser.toUpperCase().indexOf("IE") > -1;
+        final boolean wasResized = resize > 0;
+
+        if (isMacOs && isIEBrowser && wasInitialized() && wasResized) {
+
+        }
+```
+- 임시변수를 사용해 의미를 설명하려 할 때 사용된다.
+- 가급적 [메서드 추출](#1)을 통해 [임시변수를 메서드 호출로 전환](#4) 기법을 활용한다. 임시변수를 남용하는 것은 가독성에 좋지 않으며, 메서드를 추출할 경우 재사용이 가능하다.
 
 
 <a name="8"></a>
