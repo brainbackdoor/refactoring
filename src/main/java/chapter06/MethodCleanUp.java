@@ -34,4 +34,35 @@ public class MethodCleanUp {
         System.out.println("고객 외상");
         System.out.println("---------");
     }
+
+    int numberOfLateDeliveries;
+
+    public int getRating() {
+        return numberOfLateDeliveries > 5 ? 2 : 1;
+    }
+
+    String platform;
+    String browser;
+    Integer resize;
+
+    void temp() {
+        if ((platform.toUpperCase().indexOf("MAC") > -1) &&
+                (browser.toUpperCase().indexOf("IE") > -1) &&
+                wasInitialized() && resize > 0) {
+        }
+
+        final boolean isMacOs = platform.toUpperCase().indexOf("MAC") > -1;
+        final boolean isIEBrowser = browser.toUpperCase().indexOf("IE") > -1;
+        final boolean wasResized = resize > 0;
+
+        if (isMacOs && isIEBrowser && wasInitialized() && wasResized) {
+
+        }
+
+    }
+
 }
+
+    private boolean wasInitialized() {
+        return false;
+    }
