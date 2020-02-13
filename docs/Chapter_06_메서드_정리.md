@@ -6,8 +6,8 @@
 - [Inline Temp](#3)
 - [Replace Temp with Query](#4)
 - [Introduce Explaining Variable](#5)
-- [임시변수 분리](#6)
-- [매개변수로의 값 대입 제거](#7)
+- [Split Temporary Variable](#6)
+- [Remove Assignments to Parameters](#7)
 - [메서드를 메서드 객체로 전환](#8)
 - [알고리즘 전환](#9)
 
@@ -171,6 +171,37 @@
 - 임시변수를 사용해 의미를 설명하려 할 때 사용된다.
 - 가급적 [메서드 추출](#1)을 통해 [임시변수를 메서드 호출로 전환](#4) 기법을 활용한다. 임시변수를 남용하는 것은 가독성에 좋지 않으며, 메서드를 추출할 경우 재사용이 가능하다.
 
+<a name="6"></a>
+## Split Temporary Variable (임시변수 분리) ##
+> 루프 변수나 값 누적용 임시변수가 아닌 임시변수에 여러 번 값이 대입될 땐,
+> 각 대입마다 다른 임시변수를 사용하자.
+
+- 임시변수 하나를 두 가지 용도로 사용하면 코드를 분석하는 사람에게 혼동을 줄 수 있다.
+- 임시변수를 final로 선언하자. 
+
+
+<a name="7"></a>
+## Remove Assignments to Parameters (매개변수로의 값 대입 제거) ##
+> 매개변수로 값을 대입하는 코드가 있을 땐,
+> 매개변수 대신 임시변수를ㄹ 사용하게 수정하자.
+
+```java
+    int discount(int inputValue, int quantity, int yearToDate) {
+        if (inputValue > 50)  {
+            inputValue -= 2;
+        }
+    }
+```
+```java
+    int discount(final int inputValue, final int quantity, final int yearToDate) {
+        int result = inputValue;
+        if (inputValue > 50)  {
+            result -= 2;
+        }
+    }
+```
+- 값을 통한 전달로만 사용하여야 하며, '참조를 통한 전달'을 할 경우 코드의 명료성이 떨어지고 혼동될 수 있다.
+- 매개변수에 final을 붙여주자
 
 <a name="8"></a>
 ## 메서드를 메서드 객체로 전환 ##
