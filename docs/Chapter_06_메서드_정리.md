@@ -8,7 +8,7 @@
 - [Introduce Explaining Variable](#5)
 - [Split Temporary Variable](#6)
 - [Remove Assignments to Parameters](#7)
-- [메서드를 메서드 객체로 전환](#8)
+- [Replace Method with Method Object](#8)
 - [알고리즘 전환](#9)
 
 ---
@@ -204,4 +204,79 @@
 - 매개변수에 final을 붙여주자
 
 <a name="8"></a>
-## 메서드를 메서드 객체로 전환 ##
+## Replace Method with Method Object (메서드를 메서드 객체로 전환) ##
+> 지역변수 때문에 [메서드 추출](#1)을 적용할 수 없는 긴 메서드가 있을 땐,
+> 그 메서드 자체를 객체로 전환해서 모든 지역변수를 객체의 필드로 만들자.
+> 그런 다음 그 메서드를 객체 안의 여러 메서드로 쪼개면 된다.
+
+1. 전환할 메서드의 이름과 같은 의도를 드러내는 이름으로 새 클래스를 생성한다.
+2. 원본 메서드 안의 각 임시변수와 매개변수에 해당하는 속성(final)을 추가한다.
+3. 새 클래스에 원본 객체와 각 매개변수를 받는 생성자를 작성한다.
+4. 새 클래스에 compute 메서드를 작성하고 원본 메서드의 내용을 복사한다. 
+5. 원본 메서드를 새 객체의 메서드를 호출하도록 변경한다.
+
+```java
+    class Account {
+        int evaluate(int score, int weight, int yearToDate) {
+            int scoreByDelta = (score * weight) + delta();
+            int scoreByDate = (score * yearToDate) + 100;
+            if((yearToDate - scoreByDelta) > 100) {
+                scoreByDate -= 20;
+            }
+            int scoreMultipledByWeight = scoreByDate * 7;
+            // 기타 작업
+            return scoreMultipledByWeight - 2 * scoreByDelta;
+        }
+        private int delta() {
+            return 0;
+        }        
+    }
+```
+```java
+    class Account {
+        int evaluate(int score, int weight, int yearToDate) {
+            return new Evaluation(this, score, weight, yearToDate).compute();
+        }
+
+        private int delta() {
+            return 0;
+        }
+    }
+
+    class Evaluation {
+        private static final int EVALUATION_WEIGHT = 7;
+        private final Account account;
+        private int score;
+        private int weight;
+        private int yearToDate;
+        private int scoreByDelta;
+        private int scoreByDate;
+
+        public Evaluation(Account account, int score, int weight, int yearToDate) {
+            this.account = account;
+            this.score = score;
+            this.weight = weight;
+            this.yearToDate = yearToDate;
+        }
+
+        public int compute() {
+            scoreByDelta = calculateScoreByDelta();
+            scoreByDate = calculateScoreByDate();
+            return multipleByWeight() - 2 * scoreByDelta;
+        }
+
+        private int multipleByWeight() {
+            return scoreByDate * EVALUATION_WEIGHT;
+        }
+
+        int calculateScoreByDelta() {
+            return (score * weight) + account.delta();
+        }
+
+        int calculateScoreByDate() {
+            return ((yearToDate - scoreByDelta) > 100)
+                    ? (score * yearToDate) + 80
+                    : (score * yearToDate) + 100;
+        }
+    }
+```
