@@ -9,7 +9,7 @@
 - [Split Temporary Variable](#6)
 - [Remove Assignments to Parameters](#7)
 - [Replace Method with Method Object](#8)
-- [알고리즘 전환](#9)
+- [Substitute Algorithm](#9)
 
 ---
 
@@ -209,7 +209,7 @@
 > 그 메서드 자체를 객체로 전환해서 모든 지역변수를 객체의 필드로 만들자.
 > 그런 다음 그 메서드를 객체 안의 여러 메서드로 쪼개면 된다.
 
-1. 전환할 메서드의 이름과 같은 의도를 드러내는 이름으로 새 클래스를 생성한다.
+1. 전환할 메서드의 이름과 같은 의도를 드러내 이름으로 새 클래스를 생성한다.
 2. 원본 메서드 안의 각 임시변수와 매개변수에 해당하는 속성(final)을 추가한다.
 3. 새 클래스에 원본 객체와 각 매개변수를 받는 생성자를 작성한다.
 4. 새 클래스에 compute 메서드를 작성하고 원본 메서드의 내용을 복사한다. 
@@ -250,7 +250,7 @@
         private int weight;
         private int yearToDate;
         private int scoreByDelta;
-        private int scoreByDate;
+        private int scoreByDate;    
 
         public Evaluation(Account account, int score, int weight, int yearToDate) {
             this.account = account;
@@ -280,3 +280,10 @@
         }
     }
 ```
+
+<a name="9"></a>
+## Substitute Algorithm (알고리즘 전환) ##
+> 알고리즘을 더 분명한 것으로 교체해야 할 때,
+> 해당 메서드의 내용을 새 알고리즘으로 바꾸자
+
+- 메서드를 작은 단위로 쪼개고 기존 알고리즘과 대체하는 알고리즘을 대상으로 각 테스트 케이스를 실행하여 두 결과를 비교한다. 
