@@ -70,6 +70,25 @@
     }
 ```
 
-2. 새 클래스를 클라이언트에 어느정도 공개할지 결정한다. 불변객체를 활용하는 것도 좋다. 
+2. 새 클래스를 클라이언트에 어느정도 공개할지 결정한다. 불변객체를 활용하는 것도 좋다.
+
+---
+
+<a name="4"></a>
+## 클래스 내용 직접 삽입 (Inline Class) ##
+
+> 클래스에 기능이 너무 적을 땐,
+> 그 클래스의 모든 기능을 다른 클래스로 합쳐 넣는다.
+
+```java
+            Person cu = new Person();
+            cu.getOfficeTelephone().setAreaCode("032");
+```
+```java
+            Person cu = new Person();
+            cu.setAreaCode("032");
+```
+
+
 
 
