@@ -89,6 +89,18 @@
             cu.setAreaCode("032");
 ```
 
+---
+
+<a name="5"></a>
+## 대리 객체 은폐 (Hide Delegate) ##
+
+> 클라이언트가 객체의 대리 클래스를 호출할 땐,
+> 대리 클래스를 감추는 메서드를 서버에 작성하자.
 
 
-
+```java
+            Person manageer = cu.getDepartment().getManager();
+```
+```java
+            Person manageer = cu.getManager();
+```
