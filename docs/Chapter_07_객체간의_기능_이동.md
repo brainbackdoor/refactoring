@@ -105,6 +105,8 @@
             Person manageer = cu.getManager();
 ```
 
+---
+
 <a name="6"></a>
 ## 과잉 중개 메서드 제거 (Remove Middle Man) ##
 
@@ -115,3 +117,24 @@
 은폐의 정도를 어느정도까지 할 것인가에 대한 고민으로, 다시 원래대로 돌리자는 기법이나,
 디미터 법칙 위반에 해당되고 개인적으로는 중개자 역할도 의미가 있다고 생각하기에 선호하지 않는다.
  
+---
+
+<a name="7"></a>
+## 외래 클래스에 메서드 추가 (Introduce Foreign Method) ##
+
+> 사용중인 서버 클래스에 메서드를 추가해야 하는데 그 클래스를 수정할 수 없을 땐,
+> 클라이언트 클래스 안에 서버 클래스의 인스턴스를 첫 번째 인자로 받는 메서드를 작성하자. 
+(즉 서버 클래스의 외래클래스가 된다. 이는 임시방편에 불과하니 서버 클ㄹㄹ래스 제작자에게 구현을 요청하도록 한다.)
+
+```java
+            Date newStart = new Date(previousEnd.getYear(), previousEnd.getMonth(), previousEnd.getDate() + 1);
+```
+
+```java            
+            Date newStart = nextDay(previousEnd);
+
+            private static Date nextDay(Date arg) {
+                return new Date(arg.getYear(), arg.getMonth(), arg.getDate() + 1);
+            }
+               
+```
